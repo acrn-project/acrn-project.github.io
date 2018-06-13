@@ -37,7 +37,8 @@ ifconfig手动配置一个IP看能否工作
 =============
 
 如果通过上述检查任然不能确定，请提供如下材料
-1. sos: ifconfig 打印输出
-2. uos: ifconfig 打印输出
-3. uos: 启动日志
-4. wireshark抓包文件 (在SOS启动之前，PC上安装运行wireshark抓包工具, 抓取同意网段下所有数据包, 用以检查dhcp包)
+1. 出问题的版本号(commit id号)和之前好的版本号(commit id号)
+2. sos: ifconfig 打印输出
+3. uos: ifconfig 打印输出
+4. uos: 启动日志
+5. wireshark抓包文件 (在SOS启动之前，PC上安装运行wireshark抓包工具, 抓取同一网段下所有数据包, 用以检查dhcp包)

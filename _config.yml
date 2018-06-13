@@ -1,7 +1,7 @@
 # Jekyll configuration
 
 name: ACRN PROJECT
-description: Hello ACRN ！
+description: HELLO ACRN ！
 
 # url is currently only used only for the RSS feed in feed.xml
 url: https://acrn-project.github.io/

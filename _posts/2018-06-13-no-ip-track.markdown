@@ -15,7 +15,7 @@ description: BKM for checking the no ip problem
 ## 检查是否UOS死机
 ============
 
-当使用自动脚本启动时并不进入UOS控制台，如果此时发现ping不通UOS，应首先排查UOS是否死机. 如果没有死机，则可通过minicom从SOS进入UOS，具体方法如下:
+当使用自动脚本启动时并不进入UOS控制台，如果此时发现ping不通UOS，应首先排查UOS是否死机. 如果没有死机，则可通过minicom从SOS进入UOS检查，具体方法如下:
 
 1. 如果SOS没有minicom则需安装
 2. minicom -D /dev/pts/0 (/dev/pts/0 will change according to your use case)

@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "BKM for NO IP"
+title:  "关于NO IP的问题"
 categories: ACRN
 tags: ACRN
 author: Jie Deng
@@ -24,7 +24,7 @@ description: BKM for checking the no ip problem
 检查是否由于不同UOS版本
 =============
 
-1. 如果仅仅是两个UOS版本不同，而一个有IP，一个没有IP，这是由于UOS本身造成的.
+1. 如果仅仅是两个UOS版本不同，而一个有必然有IP，另一个必然没有IP，这是由于UOS本身OS造成的.
 2. 比较是否由于不同UOS启动脚本所产生的不同配置错误造成的.
 
 ifconfig手动配置一个IP看能否工作

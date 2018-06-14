@@ -30,7 +30,7 @@ description: BKM for checking the no ip problem
 ## ifconfig手动配置一个IP看能否工作
 =============
 
-如果手动给UOS配置一个合理IP后（ifconfig ethX ip address）数据可以通，则不是virtio-net的原因，DHCP过程不是由virtio-net控制，请检查上述原因.
+如果手动给UOS配置一个合理IP后(ifconfig ethX ip address, 尽量不要连接公司路由，因为公司路由可能连有很多机器，手动配置可能会有重复IP问题 .建议使用双网卡的模式或家用路由的连接方法), 数据可以通，则不是virtio-net的原因，DHCP过程不是由virtio-net控制，请检查上述原因.
 
 
 ## 分析需提供的日志

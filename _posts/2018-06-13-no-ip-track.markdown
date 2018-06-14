@@ -10,7 +10,7 @@ description: BKM for checking the no ip problem
 ## 检查公司网络策略
 ============
 
-公司有些网口只允许一个IP, 这会导致UOS拿不到IP的情况. 建议使用路由器连接MRB板子。或者使用双网卡PC, 其中一个网卡连公司，另一个绑定DHCP服务器并将其与MRB连接，这样该PC网卡和MRB上的所有OS都由PC上的DHCP分配IP.
+公司有些网口只允许一个IP, 这会导致UOS拿不到IP的情况. 建议使用路由器连接MRB板子。或者使用双网卡PC, 其中一个网卡连公司网络端口用于上外网，另一个网卡绑定DHCP服务器并将其与MRB连接，这样该PC网卡和MRB上的所有OS都由PC上的DHCP服务器分配IP.
 
 ## 检查是否UOS死机
 ============

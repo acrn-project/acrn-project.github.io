@@ -36,7 +36,7 @@ description: BKM for checking the no ip problem
 ## 分析需提供的日志
 =============
 
-如果通过上述检查任然不能确定，请提供如下材料
+如遇问题通过上述检查任然不能确定，请提供如下材料
 1. 出问题的版本号(commit id号)和之前好的版本号(commit id号)
 2. sos: ifconfig 打印输出
 3. uos: ifconfig 打印输出

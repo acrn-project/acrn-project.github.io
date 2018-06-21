@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "关于SOS/UOS NO IP的问题"
+title:  "SOS/UOS NO IP的一些case"
 categories: ACRN
 tags: ACRN
 author: Jie Deng

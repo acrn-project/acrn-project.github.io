@@ -1,16 +1,20 @@
 ---
 layout: post
-title:  "关于UOS NO IP的问题"
+title:  "关于SOS/UOS NO IP的问题"
 categories: ACRN
 tags: ACRN
 author: Jie Deng
-description: BKM for checking the UOS no ip problem
+description: BKM for checking the SOS/UOS no ip problem
 ---
 
 ## 检查公司网络策略
 ============
 
-公司有些网口只允许一个IP, 这会导致UOS拿不到IP的情况. 建议使用路由器连接MRB板子。或者使用双网卡PC, 其中一个网卡连公司网络端口用于上外网，另一个网卡绑定DHCP服务器并将其与MRB连接，这样该PC网卡和MRB上的所有OS都由PC上的DHCP服务器分配IP.
+公司可能会对switch连多个设备进行检查，导致拿不到IP的情况. 建议使用路由器连接MRB板子。或者使用双网卡PC并在其上装一个DHCP服务器, 其中一个网卡连公司网络端口用于PC上外网，另一个网卡绑定DHCP服务器并将其与MRB连接，这样该PC网卡和MRB上的所有OS都由PC上的DHCP服务器分配IP.
+
+## 检查switch设备
+============
+为了方便板子上外网，实验室普遍采用一个switch连接到公司, 并在其上连接多个设备, 测试之前应确保swtich设备的每个端口都是好的.
 
 ## 检查是否UOS死机
 ============
@@ -36,9 +40,10 @@ description: BKM for checking the UOS no ip problem
 ## 分析需提供的日志
 =============
 
-如遇问题通过上述检查任然不能确定，请提供如下材料
+如遇问题通过上述情况检查任然不能确定，请提供如下材料
+
 1. 出问题的版本号(commit id号)和之前好的版本号(commit id号)
 2. sos: ifconfig 打印输出
 3. uos: ifconfig 打印输出
 4. uos: 启动日志
-5. wireshark抓包文件 (在SOS启动之前，PC上安装运行wireshark抓包工具, 抓取同一网段下所有数据包, 用以检查dhcp包)
+5. wireshark抓包文件 (在SOS启动之前，PC上安装运行wireshark抓包工具, 抓取同一网段下所有数据包)

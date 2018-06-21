@@ -14,6 +14,7 @@ description: BKM for checking the SOS/UOS no ip problem
 
 ## 检查switch设备
 ============
+
 为了方便板子上外网，实验室普遍采用一个switch连接到公司, 并在其上连接多个设备, 测试之前应确保swtich设备的每个端口都是好的.
 
 ## 检查是否UOS死机

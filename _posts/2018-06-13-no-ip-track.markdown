@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "关于NO IP的问题"
+title:  "关于UOS NO IP的问题"
 categories: ACRN
 tags: ACRN
 author: Jie Deng
-description: BKM for checking the no ip problem
+description: BKM for checking the UOS no ip problem
 ---
 
 ## 检查公司网络策略

@@ -50,7 +50,7 @@ description: BKM for checking the SOS/UOS no ip problem
 5. wireshark抓包文件
   
    - 在SOS启动之前，PC上安装运行wireshark抓包工具, 抓取同一网段下所有数据包.
-   - 配置switch端口映射, 以便MRB板子连接的端口收发的包能转发到PC连接的端口上，具体设置方法参见具体的switch说明书.
+   - 配置switch端口映射, 以便MRB板子连接的端口收发的包能转发到PC连接的端口上，具体设置方法参见具体的switch说明书([一个例子](https://www.tp-link.com/us/faq-527.html)).
    - 设置PC网卡 ip link set ethX promisc on, 这样PC上运行的wireshark软件才可以抓到所有数据包
 
    ![DCHP Capture Setup](/assets/images/dhcp_capture.png)

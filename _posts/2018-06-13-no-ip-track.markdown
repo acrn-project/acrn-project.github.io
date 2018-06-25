@@ -48,3 +48,10 @@ description: BKM for checking the SOS/UOS no ip problem
 3. uos: ifconfig 打印输出
 4. uos: 启动日志
 5. wireshark抓包文件 (在SOS启动之前，PC上安装运行wireshark抓包工具, 抓取同一网段下所有数据包, 需配置switch端口映射, 以便MRB板子连接的端口收发的包能转发到PC连接的端口上，具体设置方法参见具体的switch说明书，并设置PC网卡 ip link set ethX promisc on, 这样PC上运行的wireshark软件才可以抓到所有数据包)
+6. DHCP日志，具体方法如下
+  1). Add below red line into the file /usr/lib/systemd/system/systemd-networkd.service
+      [Service]
+      ...
+      Environment=SYSTEMD_LOG_LEVEL=debug
+  2). Sync and Reset MRB
+  3). journalctl –b –u system-networkd > networkd.log

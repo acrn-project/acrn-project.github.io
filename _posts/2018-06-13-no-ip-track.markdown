@@ -53,7 +53,9 @@ description: BKM for checking the SOS/UOS no ip problem
    - 配置switch端口映射, 以便MRB板子连接的端口收发的包能转发到PC连接的端口上，具体设置方法参见具体的switch说明书.
    - 设置PC网卡 ip link set ethX promisc on, 这样PC上运行的wireshark软件才可以抓到所有数据包
    ```
-   ![DCHP Capture Setup](http://acrn-project.github.io/_data/images/dhcp_capture.png)
+
+   ![DCHP Capture Setup](/assets/images/dhcp_capture.png)
+
 6. DHCP日志，具体方法如下
   * Add below red line into the file /usr/lib/systemd/system/systemd-networkd.service
      ```

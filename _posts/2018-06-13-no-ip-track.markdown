@@ -51,9 +51,7 @@ description: BKM for checking the SOS/UOS no ip problem
 6. DHCP日志，具体方法如下
   * Add below red line into the file /usr/lib/systemd/system/systemd-networkd.service
      [Service]
-     
-      ...
-      
+     ... 
      Environment=SYSTEMD_LOG_LEVEL=debug
   * Sync and Reset MRB
   * journalctl –b –u system-networkd > networkd.log

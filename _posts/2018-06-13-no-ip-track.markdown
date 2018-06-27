@@ -44,8 +44,8 @@ description: BKM for checking the SOS/UOS no ip problem
 如遇问题通过上述情况检查任然不能确定，请提供如下材料
 
 1. 出问题的版本号(commit id号)和之前好的版本号(commit id号)
-2. sos: ifconfig 打印输出
-3. uos: ifconfig 打印输出
+2. sos: ifconfig or ip a 打印输出
+3. uos: ifconfig or ip a 打印输出
 4. uos: 启动日志
 5. wireshark抓包文件
   

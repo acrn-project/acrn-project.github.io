@@ -10,7 +10,7 @@ description: BKM for checking the SOS/UOS no ip problem
 ## 检查公司网络策略
 ============
 
-公司可能会对switch连多个设备进行检查，导致拿不到IP的情况. 建议使用家用路由器建立一个内网供MRB板子使用.如果是连接公司端口,碰到没有IP或很长时间才有IP的情况,请第一时间联系IT同事 Wei, JiachenX (11650945) jiachenx.wei@intel.com, 报告端口号，检查相关情况.
+公司可能会对switch连多个设备进行检查，导致拿不到IP的情况. 建议使用家用路由器建立一个内网供MRB板子使用.如果是连接公司端口,碰到没有IP或很长时间才有IP的情况,请第一时间联系IT同事 Wei, JiachenX (11650945) jiachenx.wei@intel.com, 报告端口号和设备MAC地址，检查相关情况.
 
 ## 检查switch设备
 ============

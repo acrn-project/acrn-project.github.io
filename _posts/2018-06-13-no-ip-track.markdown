@@ -63,6 +63,6 @@ description: BKM for checking the SOS/UOS no ip problem
      Environment=SYSTEMD_LOG_LEVEL=debug
      ```
   * Sync and Reset MRB
-  * journalctl -b -u system-networkd > networkd.log
+  * journalctl -b -u systemd-networkd > networkd.log
 
 7. 运行 sudo dhclient -v 输出的打印   

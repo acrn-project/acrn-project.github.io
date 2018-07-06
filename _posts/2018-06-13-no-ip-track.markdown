@@ -10,7 +10,7 @@ description: BKM for checking the SOS/UOS no ip problem
 ## 检查公司网络策略
 ============
 
-公司可能会对switch连多个设备进行检查，导致拿不到IP的情况. 建议使用路由器连接MRB板子。或者使用双网卡PC并在其上装一个DHCP服务器, 其中一个网卡连公司网络端口用于PC上外网，另一个网卡绑定DHCP服务器并将其与MRB连接，这样该PC网卡和MRB上的所有OS都由PC上的DHCP服务器分配IP.
+公司可能会对switch连多个设备进行检查，导致拿不到IP的情况. 建议使用家用路由器建立一个内网供MRB板子使用.如果是连接公司端口,碰到没有IP或很长时间才有IP的情况,请第一时间联系IT同事 Wei, JiachenX (11650945) jiachenx.wei@intel.com, 报告端口号和设备MAC地址，检查相关情况.
 
 ## 检查switch设备
 ============
@@ -44,23 +44,25 @@ description: BKM for checking the SOS/UOS no ip problem
 如遇问题通过上述情况检查任然不能确定，请提供如下材料
 
 1. 出问题的版本号(commit id号)和之前好的版本号(commit id号)
-2. sos: ifconfig 打印输出
-3. uos: ifconfig 打印输出
+2. sos: ifconfig or ip a 打印输出
+3. uos: ifconfig or ip a 打印输出
 4. uos: 启动日志
 5. wireshark抓包文件
   
    - 在SOS启动之前，PC上安装运行wireshark抓包工具, 抓取同一网段下所有数据包.
-   - 配置switch端口映射, 以便MRB板子连接的端口收发的包能转发到PC连接的端口上，具体设置方法参见具体的switch说明书([一个例子](https://www.tp-link.com/us/faq-527.html)).
+   - 配置switch端口镜像, 以便MRB板子连接的端口收发的包能转发到PC连接的端口上，具体设置方法参见具体的switch说明书([一个例子](https://www.tp-link.com/us/faq-527.html)).
    - 设置PC网卡 ip link set ethX promisc on, 这样PC上运行的wireshark软件才可以抓到所有数据包
 
    ![DCHP Capture Setup](/assets/images/dhcp_capture.png)
 
 6. DHCP日志，具体方法如下
-  * Add below red line into the file /usr/lib/systemd/system/systemd-networkd.service
+  * Add below line into the file /usr/lib/systemd/system/systemd-networkd.service
      ```
      [Service]
      ... 
      Environment=SYSTEMD_LOG_LEVEL=debug
      ```
   * Sync and Reset MRB
-  * journalctl –b –u system-networkd > networkd.log
+  * journalctl -b -u systemd-networkd > networkd.log
+
+7. 运行 sudo dhclient -v 输出的打印   

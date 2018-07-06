@@ -33,6 +33,22 @@ description: BKM for checking the SOS/UOS no ip problem
 2. minicom -D /dev/pts/0 (/dev/pts/0 will change according to your use case)
 3. run ifconfig check the network status
 
+## 检查UOS网络配置文件
+============
+
+如果UOS文件系统中有如下文件应该删除. 
+
+```
+/usr/lib/systemd/network/50-acrn.netdev 
+/usr/lib/systemd/network/50-acrn.network
+/usr/lib/systemd/network/50-acrn_tap0.netdev 
+/usr/lib/systemd/network/50-eth.network 
+```
+
+在给UOS配置双虚拟网卡时，以上文件会导致如下loop网络，最终被IT发现违反公司网络策略，物理端口被封.
+
+![loop_net](/assets/images/loop_net.png)
+
 ## 检查是否由于不同UOS版本
 =============
 

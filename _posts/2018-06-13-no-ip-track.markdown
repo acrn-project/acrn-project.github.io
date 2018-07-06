@@ -47,7 +47,7 @@ description: BKM for checking the SOS/UOS no ip problem
 
 在给UOS配置双虚拟网卡时，以上文件会导致如下loop网络，最终被IT发现违反公司网络策略，物理端口被封.
 
-![loop_net](/assets/images/loop_net.png)
+![loop_network](/assets/images/loop_net.jpg)
 
 ## 检查是否由于不同UOS版本
 =============

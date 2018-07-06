@@ -15,7 +15,7 @@ description: BKM for checking the SOS/UOS no ip problem
 ## 检查网络中是否有"干扰DHCP服务器"
 ============
 
-公司不允许在内网私自搭建DHCP服务器. 下图展示了一个"干扰DHCP服务器 192.168.10.1"的例子.导致最终获取的IP不是10.x.x.x造成网络不通.如遇此种情况，请联系IT.
+公司不允许在内网私自搭建DHCP服务器. 下图展示了一个"干扰DHCP服务器 192.168.10.1"的例子(公司的DHCP服务器是10开头的). 导致最终获取的IP不是10.x.x.x造成网络不通.如遇此种情况，请联系IT.
 
 ![rogue_dhcp_server](/assets/images/rogue_dhcp.png)
 

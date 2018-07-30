@@ -16,7 +16,7 @@ Improve proirity of DM mevent thread (that is current virtio-net BE RX thread). 
 
 1. 保持UOS上iperf处于运行状态
 
-2. 在SOS上运行htop工具
+2. 在SOS上运行htop工具 ([htop download](/assets/res/htop.tar))
    ```
    > export LD_LIBRARY_PATH=LD_LIBRARY_PATH:./
    > ./htop

@@ -1,8 +1,8 @@
 ---
 layout: post
 title:  "SOS/UOS NO IP的一些case"
-categories: ACRN
-tags: ACRN
+categories: Misc
+tags: Misc
 author: Jie Deng
 description: BKM for checking the SOS/UOS no ip problem
 ---

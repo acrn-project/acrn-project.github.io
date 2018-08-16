@@ -1,8 +1,8 @@
 ---
 layout: post
 title:  "提高DM接收线程优先级提升iperf TCP性能"
-categories: ACRN
-tags: ACRN
+categories: Misc
+tags: Misc
 author: Jie Deng
 description: 
 ---

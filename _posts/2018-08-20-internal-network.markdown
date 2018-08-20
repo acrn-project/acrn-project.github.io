@@ -47,8 +47,7 @@ Similarly, you will launch the UOS without IP
 <br>
 
 Configure a static IP to the NIC in UOS and then you can ping the SOS from UOS. E.g.
-> ifconfig enp0s4 192.168.1.2
-> ping 192.168.1.1
+> ifconfig enp0s4 192.168.1.2 <br> ping 192.168.1.1
 
 <br>
 

@@ -14,7 +14,7 @@ In some cases, you just want to communicate between SOS and UOSes without extern
 How can we achieve this.
 
 <br>
-You may need to create something like following network infrastructure
+You may need to create something network infrastructure in SOS like following
 <br>
 
 ![architecture](/assets/images/acrn-interal-net/architecture.png)

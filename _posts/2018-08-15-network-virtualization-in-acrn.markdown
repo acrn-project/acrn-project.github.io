@@ -342,3 +342,15 @@ tcp_v4_rcv -->
 <br>
 
 In this article, we introduce the network virtualization solution in ACRN, from the top level architecture to the detailed TX and RX flow. Currently, the control plane and data plane are all processed in ACRN device model, which may bring some overhead. But this is not a bottleneck at all for 1000Mbit NICs or below. The network bandwidth of virtualization can be very close to the native. For high speed NIC e.g. 10Gb or above, it is necessary to separate the data plane from the control plane. We can use vhost for acceleration. For most IoT scenarios, all in user space is simple and reasonable.
+
+<br>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-124279546-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-124279546-2');
+</script>

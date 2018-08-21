@@ -10,11 +10,15 @@ description:
 # Introduction 
 <br>
 
-The virtio-net is the paravirtualization solution used in ACRN. The ACRN device model emulate virtual NICs for UOS use and the frontend virtio network driver operate the virtual NIC. Both of them follow the virtio specification.
+The virtio-net is the paravirtualization solution used in ACRN. The ACRN device model emulate virtual NICs for UOS use and the frontend virtio network driver operate the virtual NIC. Both of them follow the virtio specification. If you are not familiar with the virtualization, I highly recommend you reading following articles before you going on.
+
+> [Introduction to Project ACRN](https://projectacrn.github.io/latest/introduction/index.html) <br>
+[Virtio high-level design in ACRN](https://projectacrn.github.io/latest/developer-guides/virtio-hld.html)
+
 
 <br>
 
-# Feathures
+# Current Status
 <br>
 -	Legacy device supported, modern device not supported
 -	Two virtqueues are used in virtio-net, i.e. RX queue and TX queue
@@ -25,10 +29,10 @@ The virtio-net is the paravirtualization solution used in ACRN. The ACRN device 
 
 <br>
 
-# Architecture
+# Architecture of Network Virtualization
 <br>
 
-Following figure 1 shows the network virtualization architecture in ACRN.
+Sending the network data on UOS to the outside requires lots of modules working together. It involves UOS network stack, virtio-net frontend driver, ACRN hypervisor, VHM module in SOS, ACRN device model, SOS network stack, bridge, tap device, igb driver and so on. Figure 1 shows the network virtualization architecture in ACRN. This figure links many necessary network virtualization components together for easy understanding. The green components are part of ACRN solution while the gray components are part of Linux kernel.
 
 <br>
 
@@ -37,33 +41,10 @@ Following figure 1 shows the network virtualization architecture in ACRN.
 
 <br>
 
-There is a detailed explanation about the I/O emulation flow of ACRN, see [ACRN I/O mediator](https://projectacrn.github.io/latest/introduction/index.html#acrn-io-mediator). The virtio-net backend in DM forward the data received from frontend to TAP device, then from TAP device to the bridge and finally from bridge to the physical NIC driver, e.g. igb, vice versa.
-
-virtio-net is implemented as a virtio legacy device in the ACRN device model (DM), and which is registered as a PCI virtio device to the guest OS (UOS). No changes are required in the frontend Linux virtio-net driver except that the guest kernel should be built with `CONFIG_VIRTIO_NET=y`.
+The virtual network card (NIC) `virtio-net` is implemented as a virtio legacy device in the ACRN device model (DM). It is registered as a PCI virtio device to the guest OS (UOS) and uses standard virtio-net in Linux kernel as its driver (the guest kernel should be built with `CONFIG_VIRTIO_NET=y`). The virtio-net backend in DM forward the data received from frontend to TAP device, then from TAP device to the bridge and finally from bridge to the physical NIC driver, e.g. igb, vice versa.
 
 <br>
-
-# How to Use
-<br>
-
-We need to prepare following network infrastructure on SOS before we start. We need to create a bridge and at least one tap device (e.g. Two tap devices are needed if you want to create dual virtual NIC) and attach physical NIC and tap devices to the bridge.
-
-<br>
-
-![vnet-structure](/assets/images/acrn-vnet/vnet-structure.png)
-<p align="center">Figure 2: Network Infrastructure in SOS</p>
-
-<br>
-
-You can use Linux commands to create above network. In our case, we use systemd to automatically create the network by default. You can check the files with prefix `50-` in SOS `/usr/lib/systemd/network/`
-> [50-acrn.netdev](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/acrn.netdev) <br> [50-acrn.network](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/acrn.network) <br> [50-acrn_tap0.netdev](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/acrn_tap0.netdev) <br> [50-eth.network](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/eth.network)
-
-Add a pci slot to the device model `acrn-dm` command line:
-
-> `-s 4,virtio-net,<tap name>`
-
-<br>
-# Code Analysis
+# Full Stack of ACRN Network
 <br>
 
 ### **Initialization in Device Model**
@@ -335,6 +316,95 @@ tcp_v4_rcv -->
                 tcp_queue_rcv -->
                     __skb_queue_tail -->
                 sk->sk_data_ready --> // application will get notified
+```
+
+<br>
+# Usage
+<br>
+
+We need to prepare following network infrastructure on SOS before we start. We need to create a bridge and at least one tap device (e.g. Two tap devices are needed if you want to create dual virtual NIC) and attach physical NIC and tap devices to the bridge.
+
+<br>
+
+![vnet-structure](/assets/images/acrn-vnet/vnet-structure.png)
+<p align="center">Figure 2: Network Infrastructure in SOS</p>
+
+<br>
+
+You can use Linux commands to create above network. In our case, we use systemd to automatically create the network by default. You can check the files with prefix `50-` in SOS `/usr/lib/systemd/network/`
+> [50-acrn.netdev](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/acrn.netdev) <br> [50-acrn.network](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/acrn.network) <br> [50-acrn_tap0.netdev](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/acrn_tap0.netdev) <br> [50-eth.network](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/eth.network)
+
+<br>
+When SOS is started, run `ifconfig` You will find device created by above systemd configuration
+```
+acrn-br0  Link encap:Ethernet  HWaddr B2:50:41:FE:F7:A3
+          inet addr:10.239.154.43  Bcast:10.239.154.255  Mask:255.255.255.0
+          inet6 addr: fe80::b050:41ff:fefe:f7a3/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:226932 errors:0 dropped:21383 overruns:0 frame:0
+          TX packets:14816 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:100457754 (95.8 Mb)  TX bytes:83481244 (79.6 Mb)
+
+acrn_tap0 Link encap:Ethernet  HWaddr F6:A7:7E:52:50:C6
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+
+enp3s0    Link encap:Ethernet  HWaddr 98:4F:EE:14:5B:74
+          inet6 addr: fe80::9a4f:eeff:fe14:5b74/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:279174 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:69923 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:107312294 (102.3 Mb)  TX bytes:87117507 (83.0 Mb)
+          Memory:82200000-8227ffff
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:16 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:16 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:1216 (1.1 Kb)  TX bytes:1216 (1.1 Kb)
+```
+
+<br>
+Run `brctl show` to see the bridge `acrn-br0` and devices attached to it
+```
+bridge name     bridge id               STP enabled     interfaces
+acrn-br0        8000.b25041fef7a3       no              acrn_tap0
+                                                        enp3s0
+```
+
+<br>
+Add a pci slot to the device model `acrn-dm` command line (mac address is optional)
+
+> `-s 4,virtio-net,<tap_name>,[mac=<XX:XX:XX:XX:XX:XX>]`
+
+<br>
+when UOS is lauched, run `ifconfig` to check the network. `enp0s4` is the virtual NIC created by `acrn-dm`
+```
+enp0s4    Link encap:Ethernet  HWaddr 00:16:3E:39:0F:CD
+          inet addr:10.239.154.186  Bcast:10.239.154.255  Mask:255.255.255.0
+          inet6 addr: fe80::216:3eff:fe39:fcd/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:140 errors:0 dropped:8 overruns:0 frame:0
+          TX packets:46 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:110727 (108.1 Kb)  TX bytes:4474 (4.3 Kb)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
 ```
 
 <br>

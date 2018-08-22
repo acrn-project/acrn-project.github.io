@@ -361,7 +361,7 @@ You can use Linux commands (e.g. `ip`, `brctl`) to create above network. In our 
 > [50-acrn.netdev](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/acrn.netdev) <br> [50-acrn.network](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/acrn.network) <br> [50-acrn_tap0.netdev](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/acrn_tap0.netdev) <br> [50-eth.network](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/eth.network)
 
 <br>
-When SOS is started, run `ifconfig` You will find devices created by above systemd configuration
+When SOS is started, run `ifconfig` you will find devices created by above systemd configuration
 ```
 acrn-br0  Link encap:Ethernet  HWaddr B2:50:41:FE:F7:A3
           inet addr:10.239.154.43  Bcast:10.239.154.255  Mask:255.255.255.0

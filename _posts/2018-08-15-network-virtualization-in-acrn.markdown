@@ -59,7 +59,7 @@ Sending the network data from UOS to the outside requires lots of modules workin
 - **Bridge / Tap Device:**
   Bridge and Tap are standard virtual network infrastructures. They play an important role in communication among SOS, UOS and outside world.  
 
-- **IGB Driver**
+- **IGB Driver:**
   IGB is the physical NIC Linux kernel driver which is responsible for sending the data to the physical NIC.
 
 <br>

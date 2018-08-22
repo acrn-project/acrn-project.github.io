@@ -32,7 +32,7 @@ The virtio-net is the paravirtualization solution used in ACRN. The ACRN device 
 # Architecture of Network Virtualization
 <br>
 
-Sending the network data on UOS to the outside requires lots of modules working together. It involves UOS network stack, virtio-net frontend driver, ACRN hypervisor, VHM module in SOS, ACRN device model, SOS network stack, bridge, tap device, igb driver and so on. Figure 1 shows the network virtualization architecture in ACRN. This figure links many necessary network virtualization components together for easy understanding. The green components are part of ACRN solution while the gray components are part of Linux kernel.
+Sending the network data from UOS to the outside requires lots of modules working together. It involves UOS network stack, virtio-net frontend driver, ACRN hypervisor, VHM module in SOS, ACRN device model, SOS network stack, bridge, tap device, IGB driver and so on. Figure 1 shows the network virtualization architecture in ACRN. This figure links many necessary network virtualization components together for easy understanding. The green components are parts of ACRN solution while the gray components are parts of Linux kernel.
 
 <br>
 
@@ -41,12 +41,38 @@ Sending the network data on UOS to the outside requires lots of modules working 
 
 <br>
 
-The virtual network card (NIC) `virtio-net` is implemented as a virtio legacy device in the ACRN device model (DM). It is registered as a PCI virtio device to the guest OS (UOS) and uses standard virtio-net in Linux kernel as its driver (the guest kernel should be built with `CONFIG_VIRTIO_NET=y`). The virtio-net backend in DM forward the data received from frontend to TAP device, then from TAP device to the bridge and finally from bridge to the physical NIC driver, e.g. igb, vice versa.
+- **SOS/UOS Network Stack:**
+  This is the standard Linux TCP/IP stack which is today's most feature-rich TCP/IP implementation.
+
+- **virtio-net Frontend Driver:**
+  This is the standard driver in Linux Kernel for virtual Ethernet device. This driver matches devices with PCI vendor ID 0x1AF4 and PCI Device ID 0x1000 (for legacy devices in our case) or 0x1041 (for modern devices). The virtual NIC supports two virtqueues, one for transmitting packets and the other for receiving packets. The frontend driver places empty buffers into one virtqueue for receiving packets, and enqueue outgoing packets into another virtqueue for transmission. The size of each virtqueue is 1024 which is configurable in backend virtio-net driver. 
+
+- **ACRN Hypervisor:**
+  The ACRN Hypervisor is a type 1 hypervisor, running directly on the bare-metal hardware, and is suitable for a variety of IoT and embedded device solutions. It fetches and analyzes the guest instruction, then put the decoded information into the shared page as IOREQ, and notify/interrupt the VHM moulde in SOS to process.
+
+- **VHM Module:**
+  VHM is the abbreviation of Virtio and Hypervisor Service Module which is a kernel module in the Service OS (SOS) acting as a middle layer to support the device model and hypervisor. The VHM forwards the IOREQ to virtio-net backend driver to process.
+
+- **ACRN Device Model / virtio-net Backend Driver:**
+  The ACRN Device Model (DM) gets IOREQ from shared page and calls virtio-net backend driver to process. The backend driver receives the data in shared virtqueues and sends it to TAP device.
+
+- **Bridge / Tap Device:**
+  Bridge and Tap are standard virtual network infrastructures. They play an important role in communication among SOS, UOS and outside world.  
+
+- **IGB Driver**
+  IGB is the physical NIC Linux kernel driver which is responsible for sending the data to the physical NIC.
 
 <br>
-# Full Stack of ACRN Network
+
+The virtual network card (NIC) is implemented as a virtio legacy device in the ACRN device model (DM). It is registered as a PCI virtio device to the guest OS (UOS) and uses standard virtio-net in Linux kernel as its driver (the guest kernel should be built with `CONFIG_VIRTIO_NET=y`). The virtio-net backend in DM forward the data received from frontend to TAP device, then from TAP device to the bridge and finally from bridge to the physical NIC driver, e.g. IGB, vice versa.
+
+<br>
+# Full Stack of ACRN Network Flow
 <br>
 
+Various components of ACRN network virtualization are illustrated in above architecture. Next, we will use UOS data transmission (TX) and reception (RX) as an example to explain step by step how these components are implemented and how they are working together. As you can see, this involves lots of modules, which is a good example for you to understand the virtualization in ACRN.
+
+<br>
 ### **Initialization in Device Model**
 <br>
 **virtio_net_init**
@@ -118,7 +144,7 @@ start_xmit -->                   // virtual NIC driver xmit in virtio_net
                 iowrite16 -->    // trap here, HV will first get notified
 ```
 <br>
-**Hypervisor**
+**ACRN Hypervisor**
 ```
 vmexit_handler -->                      // vmexit because VMX_EXIT_REASON_IO_INSTRUCTION
     pio_instr_vmexit_handler -->
@@ -137,7 +163,7 @@ vhm_intr_handler -->                          // VHM interrupt handler
                     wake_up_interruptible --> // wake up DM to handle ioreq
 ```
 <br>
-**ACRN Device Model**
+**ACRN Device Model / `virtio-net` Backend Driver**
 ```
 handle_vmexit -->
     vmexit_inout -->
@@ -256,7 +282,7 @@ dev_queue_xmit -->
 tun_net_xmit --> // Notify and wake up reader process
 ```
 <br>
-**ACRN Device Model**
+**ACRN Device Model / `virtio-net` Backend Driver**
 ```
 virtio_net_rx_callback -->       // the tap fd get notified and this function invoked
     virtio_net_tap_rx -->        // read data from tap, prepare virtqueue, insert interrupt into the UOS
@@ -270,7 +296,7 @@ vhm_dev_ioctl -->                // process the IOCTL and call hypercall to inje
     hcall_inject_msi -->
 ```
 <br>
-**Hypervisor**
+**ACRN Hypervisor**
 ```
 vmexit_handler -->               // vmexit because VMX_EXIT_REASON_VMCALL
     vmcall_vmexit_handler -->
@@ -322,7 +348,7 @@ tcp_v4_rcv -->
 # Usage
 <br>
 
-We need to prepare following network infrastructure on SOS before we start. We need to create a bridge and at least one tap device (e.g. Two tap devices are needed if you want to create dual virtual NIC) and attach physical NIC and tap devices to the bridge.
+Following network infrastructure need to be prepared in SOS before we start. We need to create a bridge and at least one tap device (PS, two tap devices are needed if you want to create dual virtual NIC) and attach physical NIC and tap device to the bridge.
 
 <br>
 
@@ -335,7 +361,7 @@ You can use Linux commands to create above network. In our case, we use systemd 
 > [50-acrn.netdev](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/acrn.netdev) <br> [50-acrn.network](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/acrn.network) <br> [50-acrn_tap0.netdev](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/acrn_tap0.netdev) <br> [50-eth.network](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/eth.network)
 
 <br>
-When SOS is started, run `ifconfig` You will find device created by above systemd configuration
+When SOS is started, run `ifconfig` You will find devices created by above systemd configuration
 ```
 acrn-br0  Link encap:Ethernet  HWaddr B2:50:41:FE:F7:A3
           inet addr:10.239.154.43  Bcast:10.239.154.255  Mask:255.255.255.0

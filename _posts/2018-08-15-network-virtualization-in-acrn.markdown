@@ -357,7 +357,7 @@ Following network infrastructure need to be prepared in SOS before we start. We 
 
 <br>
 
-You can use Linux commands to create above network. In our case, we use systemd to automatically create the network by default. You can check the files with prefix `50-` in SOS `/usr/lib/systemd/network/`
+You can use Linux commands (e.g. `ip`, `brctl`) to create above network. In our case, we use systemd to automatically create the network by default. You can check the files with prefix `50-` in SOS `/usr/lib/systemd/network/`
 > [50-acrn.netdev](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/acrn.netdev) <br> [50-acrn.network](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/acrn.network) <br> [50-acrn_tap0.netdev](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/acrn_tap0.netdev) <br> [50-eth.network](https://raw.githubusercontent.com/projectacrn/acrn-hypervisor/master/tools/acrnbridge/eth.network)
 
 <br>

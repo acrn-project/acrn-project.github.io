@@ -10,24 +10,22 @@ description:
 # Introduction 
 <br>
 
-virtio-rnd is designed to provide a hardware random source for UOS. The virtual random device is based on virtio user mode framework. It simulates a PCI device based on virtio specification.
+virtio-rnd is designed to provide a hardware random source for UOS. The virtual random device is based on virtio user mode framework. It simulates a PCI device based on virtio specification. Please refer to below ACRN hypervisor introduction and Virtio high level design for virtualization background introduction.
+
+> [Introduction to Project ACRN](https://projectacrn.github.io/latest/introduction/index.html) <br>
+[Virtio high-level design in ACRN](https://projectacrn.github.io/latest/developer-guides/virtio-hld.html)
 
 <br>
 
-# Architecture
+# Architecture of Random Virtualization
 <br>
 
-Following figure 1 shows the Random Virtualization Architecture in ACRN.
+Figure 1 shows the Random Virtualization Architecture in ACRN. The green components are parts of ACRN solution while the gray components are parts of Linux kernel. virtio-rnd is implemented as a virtio legacy device in the ACRN device model (DM), and which is registered as a PCI virtio device to the guest OS (UOS). Tools like `od` can be used to read randomness from /dev/random. This device file in UOS is bound with frontend virtio-rng driver (The guest kernel should be built with `CONFIG_HW_RANDOM_VIRTIO=y`). The backend virtio-rnd reads the HW randomness from /dev/random in SOS and sends them to frontend.
 
 <br>
 
 ![random_architecture](/assets/images/acrn-vtrnd/random_architecture.png)
-<p align="center">Figure 1: Random Virtualization Architecture</p>
-
-<br>
-
-
-virtio-rnd is implemented as a virtio legacy device in the ACRN device model (DM), and which is registered as a PCI virtio device to the guest OS (UOS). Tools like `od` can be used to read randomness from /dev/random. This device file in UOS is bound with frontend virtio-rng driver (The guest kernel should be built with `CONFIG_HW_RANDOM_VIRTIO=y`). The backend virtio-rnd reads the HW randomness from /dev/random in SOS and sends them to frontend.
+<p align="center">Figure 1: Random Virtualization in ACRN</p>
 
 <br>
 

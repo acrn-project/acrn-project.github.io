@@ -31,7 +31,7 @@ virtio-rnd is implemented as a virtio legacy device in the ACRN device model (DM
 
 <br>
 
-# Usage
+# How to Use
 
 <br>
 Add a pci slot to the device model `acrn-dm` command line, e.g.

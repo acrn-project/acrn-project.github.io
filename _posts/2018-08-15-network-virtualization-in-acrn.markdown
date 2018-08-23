@@ -345,7 +345,7 @@ tcp_v4_rcv -->
 ```
 
 <br>
-# Usage
+# How to Use
 <br>
 
 Following network infrastructure need to be prepared in SOS before we start. We need to create a bridge and at least one tap device (PS, two tap devices are needed if you want to create dual virtual NIC) and attach physical NIC and tap device to the bridge.

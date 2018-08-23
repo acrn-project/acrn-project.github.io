@@ -46,5 +46,5 @@ Check if frontend virtio_rng currently connected to `/dev/random`
 > `# cat /sys/class/misc/hw_random/rng_current` <br> virtio_rng.0
 
 <br>
-Get the randomness (*Note that HW randomness is precious resource of the system. The `od` will block and wait until there is randomness available*  )
+Get the randomness (*Note that HW randomness is precious resource of the system. The `od` will block and wait until there is randomness available*)
 > `# od /dev/random`

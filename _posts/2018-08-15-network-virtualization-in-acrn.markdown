@@ -18,7 +18,7 @@ The virtio-net is the paravirtualization solution used in ACRN. The ACRN device 
 
 <br>
 
-# Current Status
+# Supported Features
 <br>
 -	Legacy device supported, modern device not supported
 -	Two virtqueues are used in virtio-net, i.e. RX queue and TX queue
@@ -67,7 +67,7 @@ Sending the network data from UOS to the outside requires lots of modules workin
 The virtual network card (NIC) is implemented as a virtio legacy device in the ACRN device model (DM). It is registered as a PCI virtio device to the guest OS (UOS) and uses standard virtio-net in Linux kernel as its driver (the guest kernel should be built with `CONFIG_VIRTIO_NET=y`). The `virtio-net` backend in DM forward the data received from frontend to TAP device, then from TAP device to the bridge and finally from bridge to the physical NIC driver, e.g. IGB, vice versa.
 
 <br>
-# Full Stack of ACRN Network Flow
+# ACRN Virtio-Network Calling Stack
 <br>
 
 Various components of ACRN network virtualization are illustrated in above architecture. Next, we will use UOS data transmission (TX) and reception (RX) as an example to explain step by step how these components are implemented and how they are working together. As you can see, this involves lots of modules, which is a good example for you to understand the virtualization in ACRN.

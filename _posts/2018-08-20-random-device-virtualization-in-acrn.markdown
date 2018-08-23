@@ -10,7 +10,7 @@ description:
 # Introduction 
 <br>
 
-We designed a virtual random device for introducing a hardware random source into UOS. The virtual random device is based on virtio user mode framework. It simulates a PCI device based on virtio spec.
+virtio-rnd is designed to provide a hardware random source for UOS. The virtual random device is based on virtio user mode framework. It simulates a PCI device based on virtio specification.
 
 <br>
 

@@ -45,7 +45,7 @@ Sending the network data from UOS to the outside requires lots of modules workin
   This is the standard Linux TCP/IP stack which is today's most feature-rich TCP/IP implementation.
 
 - **virtio-net Frontend Driver:**
-  This is the standard driver in Linux Kernel for virtual Ethernet device. This driver matches devices with PCI vendor ID 0x1AF4 and PCI Device ID 0x1000 (for legacy devices in our case) or 0x1041 (for modern devices). The virtual NIC supports two virtqueues, one for transmitting packets and the other for receiving packets. The frontend driver places empty buffers into one virtqueue for receiving packets, and enqueue outgoing packets into another virtqueue for transmission. The size of each virtqueue is 1024 which is configurable in virtio-net backend driver. 
+  This is the standard driver in Linux Kernel for virtual Ethernet device. This driver matches devices with PCI vendor ID 0x1AF4 and PCI Device ID 0x1000 (for legacy devices in our case) or 0x1041 (for modern devices). The virtual NIC supports two virtqueues, one for transmitting packets and the other for receiving packets. The frontend driver places empty buffers into one virtqueue for receiving packets and enqueues outgoing packets into another virtqueue for transmission. The size of each virtqueue is 1024 which is configurable in virtio-net backend driver. 
 
 - **ACRN Hypervisor:**
   The ACRN hypervisor is a type 1 hypervisor, running directly on the bare-metal hardware, and is suitable for a variety of IoT and embedded device solutions. It fetches and analyzes the guest instruction, then put the decoded information into the shared page as IOREQ, and notify/interrupt the VHM moulde in SOS to process.

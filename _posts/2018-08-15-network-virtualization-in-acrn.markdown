@@ -409,7 +409,7 @@ acrn-br0        8000.b25041fef7a3       no              acrn_tap0
 <br>
 Add a pci slot to the device model `acrn-dm` command line (mac address is optional)
 
-> `-s 4,virtio-net,<tap_name>,[mac=<XX:XX:XX:XX:XX:XX>]`
+> `-s <slot_number>,virtio-net,<tap_name>,[mac=<XX:XX:XX:XX:XX:XX>]`
 
 <br>
 when UOS is lauched, run `ifconfig` to check the network. `enp0s4` is the virtual NIC created by `acrn-dm`

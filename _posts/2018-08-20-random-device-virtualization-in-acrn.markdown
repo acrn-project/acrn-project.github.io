@@ -34,7 +34,7 @@ Figure 1 shows the Random Device Virtualization Architecture in ACRN. The green 
 <br>
 Add a pci slot to the device model `acrn-dm` command line, e.g.
 
-> `-s 9,virtio-rnd`
+> `-s <slot_number>,virtio-rnd`
 
 <br>
 Check if frontend virtio_rng driver is one of available random number generator drivers in UOS

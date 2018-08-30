@@ -287,7 +287,8 @@ tun_net_xmit --> // Notify and wake up reader process
 virtio_net_rx_callback -->       // the tap fd get notified and this function invoked
     virtio_net_tap_rx -->        // read data from tap, prepare virtqueue, insert interrupt into the UOS
         vq_endchains -->
-            pci_generate_msi -->
+            vq_interrupt -->
+                pci_generate_msi -->
 ```
 <br>
 **VHM Module**

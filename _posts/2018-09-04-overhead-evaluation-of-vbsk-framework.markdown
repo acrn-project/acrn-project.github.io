@@ -44,9 +44,9 @@ Figure 1 shows the whole architecture of virtio-echo.
 
 <br>
 
-What is the overhead of VBS-K? 
+What is the overhead of VBS-K framework? 
 
-As we know, the VBS-K is designed to handle notification in SOS kernel instead of in SOS user space DM. This can avoid the overhead due to switching between kernel space and user space. Virtqueues are allocated by UOS and the virtio-echo driver in DM configures the virtqueue information to VBS-K backend so that virtqueues can be shared between UOS and SOS. So there is no copy overhead in this sense. The VBS-K mainly contains two parts, i.e., `kick overhead` and `notify overhead`.
+As we know, the VBS-K is designed to handle notification in SOS kernel instead of in SOS user space DM. This can avoid the overhead due to switching between kernel space and user space. Virtqueues are allocated by UOS and the virtio-echo driver in DM configures the virtqueue information to VBS-K backend so that virtqueues can be shared between UOS and SOS. So there is no copy overhead in this sense. The overhead of VBS-K framework mainly contains two parts, i.e., `kick overhead` and `notify overhead`.
 
 - **Kick Overhead:**
   The UOS gets trapped when it executes sensitive instruction and hypervisor will first get notified. The notification is then assembled into IOREQ and saved in a shared IO page and forwarded to VHM module by hypervisor. The VHM notifies its client for this IOREQ, in this case, the client is vbs-echo backend driver. `kick overhead` is defined as the interval from the beginning of UOS trap to specific VBS-K drvier e.g. virtio-echo gets notified.
@@ -54,15 +54,15 @@ As we know, the VBS-K is designed to handle notification in SOS kernel instead o
 - **Notify Overhead:**
   After the data in virtqueue processed by backend driver, vbs-echo calls the VHM module to inject interrupt into the frontend. The VHM then uses the hypercall provided by hyperviosr which causes the UOS VMEXIT. The hypervisor finally inject interrupt into vLAPIC of UOS and resume it. The UOS therefore receives an interrupt notification. `notify overhead` is defined as the interval from the beginning of interrupt injection to UOS starts interrupt processing.
 
-The overhead of a specific application based on VBS-K includes two parts, i.e., VBS-K overhead and application specific overhead.
+The overhead of a specific application based on VBS-K includes two parts, i.e., VBS-K framework overhead and application specific overhead.
 
-- **VBS-K Overhead:**
-  As defined above, VBS-K overhead refers to kick overhead and notify overhead.
+- **VBS-K Framework Overhead:**
+  As defined above, VBS-K framework overhead refers to kick overhead and notify overhead.
 
 - **Application Specific Overhead:**
-  A specific virtual device has its own frontend driver and backend driver. The overhead of a specific application depends on its own design.
+  A specific virtual device has its own frontend driver and backend driver. The application specific overhead depends on its own design.
 
-Figure 2 shows the overhead of virtio-echo. Overhead of steps marked as red are caused by virtualization scheme based on VBS-K. One “kick” operation costs about 21us, one “notify” operation costs about 4us. Overhead of steps marked as green depend on specific frontend and backend driver of virtual devices. For virtio-echo, the end to end process step1 to step10 costs about 64us, which means device specific overhead is 14us. That's because virtio-echo does little things in its frontend and backend driver which is just for testing and there is little process overhead.
+Figure 2 shows the overhead of virtio-echo. Overhead of steps marked as red are caused by virtualization scheme based on VBS-K framework. One “kick” operation costs about 21us, one “notify” operation costs about 4us. Overhead of steps marked as green depend on specific frontend and backend driver of virtual devices. For virtio-echo, the end to end process from step1 to step10 costs about 64us, which means device specific overhead is 14us. That's because virtio-echo does little things in its frontend and backend driver which is just for testing and there is little process overhead.
 
 <br>
 
@@ -74,6 +74,6 @@ Figure 2 shows the overhead of virtio-echo. Overhead of steps marked as red are 
 # Conclusion
 
 <br>
-In this post, we evaluate the VBS-K overhead through a testing virtual device `virtio-echo`. The total overhead of a frontend-backend application based on VBS-K contains of VBS-K framework overhead and application specific overhead. The application specific overhead depends on its specific frontend-backend design, from microseconds to seconds. While for a fixed hardware platform, the average overhead of VBS-K framework is fixed, in our HW case, the overall VBS-K framework overhead is less than 30us which can meet the needs of most applications.
+In this post, we evaluate the VBS-K framework overhead through a testing virtual device `virtio-echo`. The total overhead of a frontend-backend application based on VBS-K contains of VBS-K framework overhead and application specific overhead. The application specific overhead depends on its specific frontend-backend design, from microseconds to seconds. While for a fixed hardware platform, the average overhead of VBS-K framework is fixed, in our HW case, the overall VBS-K framework overhead is less than 30us which can meet the needs of most applications.
 
 <br>

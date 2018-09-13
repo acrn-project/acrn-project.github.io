@@ -20,7 +20,7 @@ virtio-rnd is designed to provide a hardware random source for UOS. The virtual 
 # Architecture of Random Device Virtualization
 <br>
 
-Figure 1 shows the Random Device Virtualization Architecture in ACRN. The green components are parts of ACRN solution while the gray components are parts of Linux kernel. virtio-rnd is implemented as a virtio legacy device in the ACRN device model (DM), and which is registered as a PCI virtio device to the guest OS (UOS). Tools like `od` can be used to read randomness from /dev/random. This device file in UOS is bound with frontend virtio-rng driver (The guest kernel should be built with `CONFIG_HW_RANDOM_VIRTIO=y`). The backend virtio-rnd reads the HW randomness from /dev/random in SOS and sends them to frontend.
+Figure 1 shows the Random Device Virtualization Architecture in ACRN. The green components are parts of ACRN solution while the dark components are parts of Linux software. virtio-rnd is implemented as a virtio legacy device in the ACRN device model (DM), and which is registered as a PCI virtio device to the guest OS (UOS). Tools like `od` can be used to read randomness from /dev/random. This device file in UOS is bound with frontend virtio-rng driver (The guest kernel should be built with `CONFIG_HW_RANDOM_VIRTIO=y`). The backend virtio-rnd reads the HW randomness from /dev/random in SOS and sends them to frontend.
 
 <br>
 

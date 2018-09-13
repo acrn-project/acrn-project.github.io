@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Overhead Evaluation of VBS-K Framework Based on virtio-echo"
+title:  "Overhead Evaluation of VBS-K Framework"
 categories: ACRN
 tags: ACRN
 author: Jie Deng
@@ -10,15 +10,17 @@ description:
 # Introduction 
 <br>
 
-virtio-echo is a virtual device based on virtio designed for testing of ACRN virtio backend service in kernel (VBS-K) framework. It includes a virtio-echo frontend driver, a virtio-echo driver in ACRN device model (DM) for initialization and a virtio-echo driver based on VBS-K for data reception and transmission. For more virtualization background introduction, please refer to below ACRN hypervisor introduction and Virtio high level design.
-
-> [Introduction to Project ACRN](https://projectacrn.github.io/latest/introduction/index.html) <br>
-[Virtio high-level design in ACRN](https://projectacrn.github.io/latest/developer-guides/virtio-hld.html)
+In this post, we will evaluate the VBS-K framework overhead through a testing virtual device called virtio-echo. The total overhead of a frontend-backend application based on VBS-K contains of `VBS-K framework overhead` and `application specific overhead`. The application specific overhead depends on its specific frontend-backend design, from microseconds to seconds. While for a fixed hardware platform, the average overhead of VBS-K framework is fixed, in our HW case, the overall VBS-K framework overhead is less than 30us which can meet the needs of most applications.
 
 <br>
 
 # Architecture of VIRTIO-ECHO
 <br>
+
+virtio-echo is a virtual device based on virtio designed for testing of ACRN virtio backend service in kernel (VBS-K) framework. It includes a virtio-echo frontend driver, a virtio-echo driver in ACRN device model (DM) for initialization and a virtio-echo driver based on VBS-K for data reception and transmission. For more virtualization background introduction, please refer to below ACRN hypervisor introduction and Virtio high level design.
+
+> [Introduction to Project ACRN](https://projectacrn.github.io/latest/introduction/index.html) <br>
+[Virtio high-level design in ACRN](https://projectacrn.github.io/latest/developer-guides/virtio-hld.html)
 
 virtio-echo is implemented as a virtio legacy device in the ACRN device model (DM), and which is registered as a PCI virtio device to the guest OS (UOS). The software of virtio-echo consists of three parts:
 
@@ -62,18 +64,30 @@ The overhead of a specific application based on VBS-K includes two parts, i.e., 
 - **Application Specific Overhead:**
   A specific virtual device has its own frontend driver and backend driver. The application specific overhead depends on its own design.
 
-Figure 2 shows the overhead of virtio-echo. Overhead of steps marked as red are caused by virtualization scheme based on VBS-K framework. One “kick” operation costs about 21us, one “notify” operation costs about 4us. Overhead of steps marked as green depend on specific frontend and backend driver of virtual devices. For virtio-echo, the end to end process from step1 to step10 costs about 64us, which means device specific overhead is 14us. That's because virtio-echo does little things in its frontend and backend driver which is just for testing and there is little process overhead.
+<br>
+
+Figure 2a shows the overhead of one end to end operation in virtio-echo. Overhead of steps marked as red are caused by virtualization scheme based on VBS-K framework. One “*kick*” operation costs about 21us, one “*notify*” operation costs about 4us. Overhead of steps marked as yellow depend on specific frontend and backend driver of virtual devices. For virtio-echo, the whole end to end process from step1 to step9 costs about 64us, which includes two kick operations and two notify operations meaning device specific overhead is 14us. That's because virtio-echo does little things in its frontend and backend driver which is just for testing and there is little process overhead.
 
 <br>
 
-![virtio-echo_overhead](/assets/images/acrn-vbsk/virtio-echo_overhead.png)
-<p align="center">Figure 2: virtio-echo overhead</p>
+![virtio-echo_overhead1](/assets/images/acrn-vbsk/virtio-echo_overhead1.png)
+<p align="center">Figure 2a: End to End Overhead of virtio-echo</p>
+
+<br>
+
+Figure 2b details the path of kick and notify operation showed in Figure 2a. The VBS-K framework overhead is caused by operations through these paths. As we can see, all these operations are processed in kernel mode which avoids extra overhead of passing IOREQ to user space processing.
+
+<br>
+
+![virtio-echo_overhead2](/assets/images/acrn-vbsk/virtio-echo_overhead2.png)
+<p align="center">Figure 2b: Path of VBS-K Framework Overhead</p>
 
 <br>
 
 # Conclusion
 
 <br>
-In this post, we evaluate the VBS-K framework overhead through a testing virtual device `virtio-echo`. The total overhead of a frontend-backend application based on VBS-K contains of VBS-K framework overhead and application specific overhead. The application specific overhead depends on its specific frontend-backend design, from microseconds to seconds. While for a fixed hardware platform, the average overhead of VBS-K framework is fixed, in our HW case, the overall VBS-K framework overhead is less than 30us which can meet the needs of most applications.
+
+Different from VBS-U processing in user mode, VBS-K move things into the kernel mode and can be used to accelerate the processing. A virtual device virtio-echo based on VBS-K framework is used to evaluate the VBS-K framework overhead. In our test, the VBS-K framework Overhead (one kick operation and one notify operation) is about 25us which can meet the needs of most applications.
 
 <br>

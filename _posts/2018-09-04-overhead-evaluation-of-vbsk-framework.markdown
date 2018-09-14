@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "VBS-k Framework Virtualization Overhead Analysis"
+title:  "VBS-K Framework Virtualization Overhead Analysis"
 categories: ACRN
 tags: ACRN
 author: Jie Deng

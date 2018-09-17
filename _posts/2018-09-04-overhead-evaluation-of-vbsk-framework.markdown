@@ -10,7 +10,7 @@ description:
 # Introduction 
 <br>
 
-In this post, we will evaluate the VBS-K framework overhead through a testing virtual device called virtio-echo. The total overhead of a frontend-backend application based on VBS-K contains of `VBS-K framework overhead` and `application specific overhead`. The application specific overhead depends on its specific frontend-backend design, from microseconds to seconds. While for a fixed hardware platform, the average overhead of VBS-K framework is fixed, in our HW case, the overall VBS-K framework overhead is less than 30us which can meet the needs of most applications.
+In this post, we will evaluate the VBS-K framework overhead through a testing virtual device called virtio-echo. The total overhead of a frontend-backend application based on VBS-K contains of `VBS-K framework overhead` and `application specific overhead`. The application specific overhead depends on its specific frontend-backend design, from microseconds to seconds. While for a fixed hardware platform, the average overhead of VBS-K framework is fixed, in our HW case, the overall VBS-K framework overhead is on the microsecond level which can meet the needs of most applications.
 
 <br>
 
@@ -66,11 +66,11 @@ The overhead of a specific application based on VBS-K includes two parts, i.e., 
 
 <br>
 
-Figure 2a shows the overhead of one end to end operation in virtio-echo. Overhead of steps marked as red are caused by virtualization scheme based on VBS-K framework. One “*kick*” operation costs about 21us, one “*notify*” operation costs about 4us. Overhead of steps marked as yellow depend on specific frontend and backend driver of virtual devices. For virtio-echo, the whole end to end process from step1 to step9 costs about 64us, which includes two kick operations and two notify operations meaning device specific overhead is 14us. That's because virtio-echo does little things in its frontend and backend driver which is just for testing and there is little process overhead.
+Figure 2a shows the overhead of one end to end operation in virtio-echo. Overhead of steps marked as red are caused by virtualization scheme based on VBS-K framework. Costs of one “*kick*” operation and one “*notify*” operation are both on microsecond level. Overhead of steps marked as yellow depend on specific frontend and backend driver of virtual devices. For virtio-echo, the whole end to end process from step1 to step9 costs about dozens of microsecond. That's because virtio-echo does little things in its frontend and backend driver which is just for testing and there is little process overhead.
 
 <br>
 
-![virtio-echo_overhead1](/assets/images/acrn-vbsk/virtio-echo_overhead1.png)
+![virtio-echo_overhead1](/assets/images/acrn-vbsk/virtio-echo_overhead1-notime.png)
 <p align="center">Figure 2a: End to End Overhead of virtio-echo</p>
 
 <br>
@@ -88,6 +88,6 @@ Figure 2b details the path of kick and notify operation showed in Figure 2a. The
 
 <br>
 
-Different from VBS-U processing in user mode, VBS-K move things into the kernel mode and can be used to accelerate the processing. A virtual device virtio-echo based on VBS-K framework is used to evaluate the VBS-K framework overhead. In our test, the VBS-K framework Overhead (one kick operation and one notify operation) is about 25us which can meet the needs of most applications.
+Different from VBS-U processing in user mode, VBS-K move things into the kernel mode and can be used to accelerate the processing. A virtual device virtio-echo based on VBS-K framework is used to evaluate the VBS-K framework overhead. In our test, the VBS-K framework Overhead (one kick operation and one notify operation) is on the microsecond level which can meet the needs of most applications.
 
 <br>
